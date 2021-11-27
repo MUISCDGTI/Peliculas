@@ -3,6 +3,11 @@
   "version": "1.0.0",
   "description": "API Peliculas",
   "main": "index.js",
+  "repository":{
+    "type": "git",
+    "url": "https://github.com/MUISCDGTI/Peliculas.git"
+  },
+  "homepage" : "https://github.com/MUISCDGTI/Peliculas.git",
   "scripts": {
     "start": "node index.js",
     "test": "echo \"Error: no test specified\" && exit 1"

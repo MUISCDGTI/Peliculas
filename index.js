@@ -1,7 +1,7 @@
 var express = require('express');
 var db = require("./db");
 
-var port = 3000;
+var port = (process.env.PORT || 3000); 
 
 console.log("Starting API server...");
 
