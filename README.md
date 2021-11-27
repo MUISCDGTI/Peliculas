@@ -13,4 +13,8 @@ To start the server, run:
 npm start
 ```
 
+Open in browser:
 
+```
+localhost:3000
+```
