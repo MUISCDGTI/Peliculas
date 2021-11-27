@@ -1,1 +1,16 @@
 # Peliculas
+
+To initialize the project, run:
+
+```
+npm init
+```
+
+
+To start the server, run:
+
+```
+npm start
+```
+
+
