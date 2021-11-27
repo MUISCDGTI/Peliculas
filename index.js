@@ -1,4 +1,5 @@
 var express = require('express');
+var db = require("./db");
 
 var port = 3000;
 
@@ -10,6 +11,12 @@ app.get("/", (req, res) => {
     res.send("Hello world!");
 });
 
-app.listen(port);
-
-console.log("Server ready!");
+db().then(
+    () => {
+      app.listen(port);
+      console.log("Server ready!");
+    },
+    (err) => {
+      console.log("Connection error: " + err);
+    }
+  );
