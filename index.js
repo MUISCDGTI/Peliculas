@@ -1,22 +1,16 @@
-var express = require('express');
-var db = require("./db");
+const app = require('./server.js');
+const dbConnect = require('./db');
 
-var port = (process.env.PORT || 3000); 
+var port = (process.env.PORT || 3000);
 
-console.log("Starting API server...");
+console.log("Starting API server at "+port);
 
-var app = express();
-
-app.get("/", (req, res) => {
-    res.send("Hello world!");
-});
-
-db().then(
+dbConnect().then(
     () => {
-      app.listen(port);
-      console.log("Server ready!");
+        app.listen(port);
+        console.log("Server ready!");
     },
-    (err) => {
-      console.log("Connection error: " + err);
+    err => {
+        console.log("Connection error: "+err);
     }
-  );
+)

@@ -3,7 +3,7 @@
 To initialize the project, run:
 
 ```
-npm init
+npm install
 ```
 
 
