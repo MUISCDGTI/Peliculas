@@ -18,4 +18,3 @@ Open in browser:
 ```
 localhost:3000
 ```
->>>>>>> master
