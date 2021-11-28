@@ -16,5 +16,5 @@ npm start
 Open in browser:
 
 ```
-localhost:3000
+localhost:3000/api/v1/
 ```
