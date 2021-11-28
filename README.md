@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Peliculas
 
 To initialize the project, run:
@@ -18,3 +19,25 @@ Open in browser:
 ```
 localhost:3000/api/v1/
 ```
+=======
+# Peliculas
+
+To initialize the project, run:
+
+```
+npm install
+```
+
+
+To start the server, run:
+
+```
+npm start
+```
+
+Open in browser:
+
+```
+localhost:3000
+```
+>>>>>>> master

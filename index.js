@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 var express = require('express');
 var db = require("./db");
 var bodyParser = require('body-parser');
@@ -52,3 +53,21 @@ app.post(BASE_API_PATH + "/films", (req, res) => {
   });
 });
 module.exports = app;
+=======
+const app = require('./server.js');
+const dbConnect = require('./db');
+
+var port = (process.env.PORT || 3000);
+
+console.log("Starting API server at "+port);
+
+dbConnect().then(
+    () => {
+        app.listen(port);
+        console.log("Server ready!");
+    },
+    err => {
+        console.log("Connection error: "+err);
+    }
+)
+>>>>>>> master
