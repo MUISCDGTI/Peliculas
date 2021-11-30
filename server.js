@@ -40,5 +40,17 @@ app.post(BASE_API_PATH + "/films", (req, res) => {
     });
 });
 
+app.delete(BASE_API_PATH + "/films", (req, res) => {
+    console.log(Date() + " - DELETE /films");
+    //var film = req.body;
+    Film.deleteMany({}, (err) => {
+        if (err) {
+            console.log(Date() + " - " + err);
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(204);
+        }
+    });
+});
 
 module.exports = app;
