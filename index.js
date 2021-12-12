@@ -1,4 +1,4 @@
-const app = require('server.js');
+const app = require('./server');
 const dbConnect = require('./db');
 //dbConnect.user.deleteMany({});
 
