@@ -95,4 +95,9 @@ app.delete(BASE_API_PATH + "/films", (req, res) => {
     });
 });
 
+app.get(BASE_API_PATH + "/healthz", (req, res) => {
+    res.sendStatus(200);
+  });
+  
+
 module.exports = app;
