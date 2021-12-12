@@ -27,9 +27,26 @@ app.get(BASE_API_PATH + "/films", (req, res) => {
     });
 });
 
+app.get(BASE_API_PATH + "/films/:id", (req, res) => {
+    console.log(Date() + " - GET /films/id");
+
+    Film.find({id:req.params.id}, (err, films) => {
+        if (err) {
+            console.log(Date() + " - " + err);
+            res.sendStatus(404);
+        } else {
+            res.send(films.map((film)=>{
+                return film;
+            }));
+        }
+    });
+});
+
 app.post(BASE_API_PATH + "/films", (req, res) => {
     console.log(Date() + " - POST /films");
+
     var film = req.body;
+    console.log(req.body);
     Film.create(film, (err) => {
         if (err) {
             console.log(Date() + " - " + err);
@@ -40,9 +57,34 @@ app.post(BASE_API_PATH + "/films", (req, res) => {
     });
 });
 
+app.put(BASE_API_PATH + "/films/:id", (req, res) => {
+    console.log(Date() + " - PUT /films/id");
+    console.log(req.body);
+    Film.findOneAndUpdate({id:req.params.id},{name:req.body.name,rating:req.body.rating}, (err) => {
+        if (err) {
+            console.log(Date() + " - " + err);
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(200);
+        }
+    });
+});
+
+app.delete(BASE_API_PATH + "/films/:id", (req, res) => {
+    console.log(Date() + " - DELETE /films/id");
+    Film.findOneAndDelete({id:req.params.id}, (err) => {
+        if (err) {
+            console.log(Date() + " - " + err);
+            res.sendStatus(500);
+        } else {
+            res.sendStatus(204);
+        }
+    });
+});
+
 app.delete(BASE_API_PATH + "/films", (req, res) => {
     console.log(Date() + " - DELETE /films");
-    //var film = req.body;
+
     Film.deleteMany({}, (err) => {
         if (err) {
             console.log(Date() + " - " + err);
