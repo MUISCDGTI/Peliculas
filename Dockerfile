@@ -1,13 +1,10 @@
-FROM node:16.13.0
+FROM node:16
 
 WORKDIR /app
 
-COPY package.json .
-COPY package-lock.json .
+COPY . .
 
 RUN npm install
-
-COPY index.js .
 
 EXPOSE 3000
 
