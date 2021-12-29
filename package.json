@@ -22,5 +22,8 @@
   },
   "bugs": {
     "url": "https://github.com/MUISCDGTI/Peliculas/issues"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0"
   }
 }

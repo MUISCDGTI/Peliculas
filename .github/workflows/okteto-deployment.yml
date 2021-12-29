@@ -1,0 +1,25 @@
+name: Oketo Deployment
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      
+      - name: Okteto Login
+        uses: okteto/login@latest
+        with:
+          token: ${{ secrets.OKTETO_TOKEN }}
+          
+      - name: Okteto Pipeline
+        uses: okteto/pipeline@latest
+        with:
+          name: peliculas
+          namespace: drorganvidez
