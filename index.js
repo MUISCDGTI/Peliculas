@@ -1,6 +1,5 @@
 const app = require('./server.js');
 const dbConnect = require('./db.js');
-//dbConnect.user.deleteMany({});
 
 var port = (process.env.PORT || 3000);
 
