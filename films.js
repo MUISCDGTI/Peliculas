@@ -4,14 +4,15 @@ const AutoIncrement = require('mongoose-sequence')(mongoose);
 const filmSchema = new mongoose.Schema({
     id:  {
         type:Number,
-        unique: true,
-        sparse: true},
+        unique: [true, 'Film must be unique'],
+        sparse: true
+    },
     title: {
         type: String,
-        unique: true,
+        unique: [true, 'Film title must be unique'],
         required: [true, 'Film title is needed']
     },
-    genre: [String],
+    genre: ["Action", "Adventure", "Comedy", "Fantasy", "Horror", "Romance", "Thriller"],
     released_at: {
         type: Date,
         required: true,
