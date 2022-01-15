@@ -1,9 +1,8 @@
-
 const app = require("../server.js");
 const request = require("supertest");
-const Rating = require("../films.js");
+const Film = require("../src/models/film.js");
 
-describe("Ratings API", () => {
+describe("Films API", () => {
 
     describe("GET /", () => {
       it("should return an HTML document", () => {
@@ -17,77 +16,63 @@ describe("Ratings API", () => {
       });
     });
 
-    /*
   
-    describe("GET /ratings", () => {
-      beforeEach(() => {
-        const ratings = [
-          {
-            value: "4.5",
-            description: "Good film",
-            film: "1",
-            user: "11",
-            date: "2020-11-02T23:00:00.000+00:00",
-          },
-          {
-            value: "1.5",
-            description: "Bad film",
-            film: "15",
-            user: "19",
-            date: "2021-12-02T23:00:00.000+00:00",
-          },
-          {
-            value: "3",
-            description: "Nice",
-            film: "15",
-            user: "11",
-            date: "2021-12-16T17:00:00.000+00:00",
-          },
-        ];
-  
-        dbFind = jest.spyOn(Rating, "find");
-        dbFind.mockImplementation((query, sm, sort, callback) => {
-          callback(null, ratings);
+    describe("GET /films", () => {
+
+        beforeEach(() => {
+
+            const films = [
+                {
+                    id: 1,
+                    title: "Spiderman Homecoming",
+                    genre: "Action",
+                    released_at: "2017-07-28T00:00:00.000Z",
+                    rating: "9",
+                },{
+                    id: 2,
+                    title: "Spiderman No Way Home",
+                    genre: "Action",
+                    released_at: "2021-12-17T00:00:00.000Z",
+                    rating: "9"
+                },{
+                    id: 3,
+                    title: "It",
+                    genre: "Terror",
+                    released_at: "2017-09-08T00:00:00.000Z",
+                    rating: "6.4"
+                }
+            ];
+
+            dbFind = jest.spyOn(Film, "find");
+            dbFind.mockImplementation((query, sm, sort, callback) => {
+                callback(null, films);
+            });
         });
-      });
+
+        it("should return all films", () => {
+
+            return request(app)
+                .get("/api/v1/films")
+                .then((response) => {
+
+                    expect(response.statusCode).toBe(200);
+
+                    expect(dbFind).toBeCalledWith(
+                        {},
+                        null,
+                        { sort: { released_at: 1 } },
+                        expect.any(Function)
+                      );
+
+                    expect(response => {console.log(response)})
+
+                });
+        });
+
+    });
   
-      it("should return all ratings sortered asc", () => {
-        return request(app)
-          .get("/api/v1/ratings")
-          .then((response) => {
-            expect(response.statusCode).toBe(200);
-            expect(response.body).toStrictEqual([
-              {
-                value: "4.5",
-                description: "Good film",
-                film: "1",
-                user: "11",
-                date: "2020-11-02T23:00:00.000+00:00",
-              },
-              {
-                value: "1.5",
-                description: "Bad film",
-                film: "15",
-                user: "19",
-                date: "2021-12-02T23:00:00.000+00:00",
-              },
-              {
-                value: "3",
-                description: "Nice",
-                film: "15",
-                user: "11",
-                date: "2021-12-16T17:00:00.000+00:00",
-              },
-            ]);
-            expect(dbFind).toBeCalledWith(
-              {},
-              null,
-              { sort: { date: 1 } },
-              expect.any(Function)
-            );
-          });
-      });
-  
+    /*    
+        
       it("should return all ratings sortered des", () => {
         dbFind.mockImplementation((query, sm, sort, callback) => {
           callback(null, [{
@@ -198,7 +183,7 @@ describe("Ratings API", () => {
           );
       });
   
-      /* it("should return ratings filtered by range of dates", () => {
+      it("should return ratings filtered by range of dates", () => {
         dbFind.mockImplementation((query, sm, sort, callback) => {
           callback(null, [{
             value: "1.5",
@@ -694,5 +679,7 @@ describe("Ratings API", () => {
           });
       });
     });
+
     */
+    
   });
