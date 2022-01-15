@@ -51,41 +51,6 @@ describe("Films DB connection", () => {
         });
     });
 
-    it("not writes the same film two times in the DB", (done) => {
-
-        const film_1 = new Film(
-            {
-                title: "Harry Potter and the Globet of Fire", 
-                genre: "Fantasy", 
-                released_at: "2005-11-25",
-                rating: 10
-            }
-        );
-
-        film_1.save((err, film) => {
-            expect(err).toBeNull();
-            Film.find({}, (err, films) => {
-                expect(films).toBeArrayOfSize(1);
-                done();
-            });
-        });
-
-        const film_2 = new Film(
-            {
-                title: "Harry Potter and the Globet of Fire", 
-                genre: "Fantasy", 
-                released_at: "2005-11-25",
-                rating: 10
-            }
-        );
-
-        film_2.save((err_2, film) => {
-            err_message = "E11000 duplicate key error collection: Cluster0.films index: title_1 dup key: { title: \"Harry Potter and the Globet of Fire\" }"
-            expect(err_2.message).toEqual(err_message);
-            done();
-        });
-    });
-
     it.each([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
         ("writes a film in the DB with value between max and min rating", (value, done) => {
         const film = new Film(
