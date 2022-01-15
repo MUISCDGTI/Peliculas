@@ -1,6 +1,7 @@
 const app = require("../server.js");
 const request = require("supertest");
 const Film = require("../src/models/film.js");
+const ApiKey = require('../apikeys.js');
 
 describe("Films API", () => {
 
@@ -19,7 +20,7 @@ describe("Films API", () => {
   
     describe("GET /films", () => {
 
-        beforeEach(() => {
+        beforeAll(() => {
 
             const films = [
                 {
@@ -43,16 +44,27 @@ describe("Films API", () => {
                 }
             ];
 
+            const user = {
+              user : 'test',
+              apikey: '1'
+            }
+
             dbFind = jest.spyOn(Film, "find");
             dbFind.mockImplementation((query, sm, sort, callback) => {
                 callback(null, films);
             });
+
+            auth = jest.spyOn(ApiKey, "findOne");
+            auth.mockImplementation((query, callback) => {
+              callback(null, new ApiKey(user));
+            })
         });
 
         it("should return all films", () => {
 
             return request(app)
                 .get("/api/v1/films")
+                .set('apikey', '1')
                 .then((response) => {
 
                     expect(response.statusCode).toBe(200);
@@ -73,6 +85,7 @@ describe("Films API", () => {
 
             return request(app)
                 .get("/api/v1/films")
+                .set('apikey', '1')
                 .then((response) => {
 
                     expect(response.statusCode).toBe(200);
@@ -120,6 +133,7 @@ describe("Films API", () => {
 
           return request(app)
             .get("/api/v1/films")
+            .set('apikey', '1')
             .query({ sort: 'des' })
             .then((response) => {
               expect(response.statusCode).toBe(200);
@@ -178,6 +192,7 @@ describe("Films API", () => {
 
           return request(app)
             .get("/api/v1/films")
+            .set('apikey', '1')
             .query({ genre: 'Action' })
             .then((response) => {
               expect(response.statusCode).toBe(200);
@@ -229,6 +244,7 @@ describe("Films API", () => {
 
           return request(app)
             .get("/api/v1/films")
+            .set('apikey', '1')
             .query({ startDate: '2017-01-01', endDate: '2021-01-01' })
             .then((response) => {
               expect(response.statusCode).toBe(200);
@@ -280,6 +296,7 @@ describe("Films API", () => {
 
           return request(app)
             .get("/api/v1/films")
+            .set('apikey', '1')
             .query({ year: '2017'})
             .then((response) => {
               expect(response.statusCode).toBe(200);
@@ -331,6 +348,7 @@ describe("Films API", () => {
 
           return request(app)
             .get("/api/v1/films")
+            .set('apikey', '1')
             .query({ rating: 6.5})
             .then((response) => {
               expect(response.statusCode).toBe(200);
@@ -383,6 +401,7 @@ describe("Films API", () => {
      it("should return a film by id", () => {
       return request(app)
         .get("/api/v1/films/1")
+        .set('apikey', '1')
         .then((response) => {
           expect(response.statusCode).toBe(200);
           expect(response.body).toStrictEqual({
@@ -406,6 +425,7 @@ describe("Films API", () => {
   
         return request(app)
           .get("/api/v1/films/100")
+          .set('apikey', '1')
           .then((response) => {
             expect(response.statusCode).toBe(404);
             expect(response.body).toStrictEqual({});
@@ -445,6 +465,7 @@ describe("Films API", () => {
       it("should create a film", () => {
         return request(app)
           .post("/api/v1/films")
+          .set('apikey', '1')
           .send(film)
           .then((response) => {
             expect(response.statusCode).toBe(201);
@@ -480,6 +501,7 @@ describe("Films API", () => {
       it("should update a film title by id", () => {
         return request(app)
           .put("/api/v1/films/1")
+          .set('apikey', '1')
           .send(body)
           .then((response) => {
             expect(response.statusCode).toBe(200);
@@ -505,6 +527,7 @@ describe("Films API", () => {
       it("should not update a film title by id", () => {
         return request(app)
           .put("/api/v1/films/1")
+          .set('apikey', '1')
           .send(body_2)
           .then((response) => {
             expect(response.statusCode).toBe(200);
@@ -547,6 +570,7 @@ describe("Films API", () => {
         });
         return request(app)
           .delete("/api/v1/films/1")
+          .set('apikey', '1')
           .then((response) => {
             expect(response.statusCode).toBe(200);
             expect(dbDelete).toBeCalledWith(
@@ -562,6 +586,7 @@ describe("Films API", () => {
         });
         return request(app)
           .delete("/api/v1/films/100")
+          .set('apikey', '1')
           .then((response) => {
             expect(response.statusCode).toBe(200);
             expect(dbDelete).toBeCalledWith(

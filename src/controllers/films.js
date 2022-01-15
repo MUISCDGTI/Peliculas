@@ -1,5 +1,7 @@
 const express = require("express");
 const app = express.Router();
+require('../../passport.js');
+const passport = require('passport');
 
 var Film = require("../models/film.js");
 
@@ -8,7 +10,9 @@ const moment = require('moment');
 const today = moment().startOf('day');
 
 //GET ALL FILMS
-app.get("/", (req, res) => {
+app.get("/", passport.authenticate('localapikey', {session:false}), 
+
+  (req, res) => {
 
     console.log(Date() + " - GET /films");
 
@@ -69,7 +73,7 @@ app.get("/", (req, res) => {
 });
 
 //GET FILM BY ID
-app.get("/:film_id", (req, res) => {
+app.get("/:film_id", passport.authenticate('localapikey', {session:false}), (req, res) => {
     console.log(Date() + " - GET /films/id");
     let id = req.params.film_id;
   
@@ -84,7 +88,7 @@ app.get("/:film_id", (req, res) => {
   });
 
 //POST A NEW FILM
-app.post("/", (req, res) => {
+app.post("/",passport.authenticate('localapikey', {session:false}), (req, res) => {
     console.log(Date() + " - POST /films");
     var film = new Film(req.body);
 
@@ -104,7 +108,7 @@ app.post("/", (req, res) => {
 });
 
 //MODIFY AN EXISTING FILM FOUND BY ID
-app.put("/:film_id", (req, res) => {
+app.put("/:film_id", passport.authenticate('localapikey', {session:false}), (req, res) => {
     console.log(Date() + " - PUT /films/id");
 
     let id = req.params.film_id;
@@ -137,10 +141,8 @@ app.put("/:film_id", (req, res) => {
       });
  });
 
-
-
 // DELETE EXISTING FILM FOUND BY ID
-app.delete("/:film_id", (req, res) => {
+app.delete("/:film_id",passport.authenticate('localapikey', {session:false}), (req, res) => {
     console.log(Date() + " - DELETE /films/:film_id");
     const film_id = req.params.film_id;
     Film.deleteOne({ _id: film_id }, (err, film) => {
@@ -153,9 +155,8 @@ app.delete("/:film_id", (req, res) => {
     });
   });
 
-
 //DELETE ALL FILMS FROM THE COLLECTION
-app.delete("/", (req, res) => {
+app.delete("/", passport.authenticate('localapikey', {session:false}),(req, res) => {
     console.log(Date() + " - DELETE /films");
 
     Film.deleteMany({}, (err) => {
