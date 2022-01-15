@@ -1,25 +1,21 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 const filmSchema = new mongoose.Schema({
     id:  {
         type:Number,
-        unique: true,
-        sparse: true},
+        unique: [true, 'Film must be unique'],
+        sparse: true
+    },
     title: {
         type: String,
-        unique: true,
+        unique: [true, 'Film title must be unique'],
         required: [true, 'Film title is needed']
     },
-    genre: [String],
+    genre: ["Action", "Adventure", "Comedy", "Fantasy", "Horror", "Romance", "Thriller"],
     released_at: {
-        type: String,
-        validate: {
-            validator: function(v) {
-                return /\d{4}-\d{2}-\d{2}/.test(v);
-            },
-            message: props => `${props.value} is not a valid release date, example: "1998-11-05"`
-          }
+        type: Date,
+        required: true,
     },
     poster: String,
     director: String,

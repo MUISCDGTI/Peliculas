@@ -6,13 +6,18 @@ on:
   pull_request:
     branches: [ master ]
 
+
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    uses: MUISCDGTI/Peliculas/.github/workflows/tests.yml@main
     
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Okteto Login
         uses: okteto/login@latest
         with:
