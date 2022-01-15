@@ -69,316 +69,341 @@ describe("Films API", () => {
                 });
         });
 
-    });
-  
-    /*    
-        
-      it("should return all ratings sortered des", () => {
-        dbFind.mockImplementation((query, sm, sort, callback) => {
-          callback(null, [{
-            value: "3",
-            description: "Nice",
-            film: "15",
-            user: "11",
-            date: "2021-12-16T17:00:00.000+00:00",
-          },
-          {
-            value: "1.5",
-            description: "Bad film",
-            film: "15",
-            user: "19",
-            date: "2021-12-02T23:00:00.000+00:00",
-          },
-          {
-            value: "4.5",
-            description: "Good film",
-            film: "1",
-            user: "11",
-            date: "2020-11-02T23:00:00.000+00:00",
-          },]);
+        it("should return all films", () => {
+
+            return request(app)
+                .get("/api/v1/films")
+                .then((response) => {
+
+                    expect(response.statusCode).toBe(200);
+
+                    expect(dbFind).toBeCalledWith(
+                        {},
+                        null,
+                        { sort: { released_at: 1 } },
+                        expect.any(Function)
+                      );
+
+                    expect(response => {console.log(response)})
+
+                });
         });
-        return request(app)
-          .get("/api/v1/ratings")
-          .query({ sort: 'des' })
-          .then((response) => {
-            expect(response.statusCode).toBe(200);
-            expect(response.body).toStrictEqual([
+
+        it("should return all films sortered des", () => {
+
+          dbFind.mockImplementation((query, sm, sort, callback) => {
+
+            callback(null, [
+
               {
-                value: "3",
-                description: "Nice",
-                film: "15",
-                user: "11",
-                date: "2021-12-16T17:00:00.000+00:00",
-              },
-              {
-                value: "1.5",
-                description: "Bad film",
-                film: "15",
-                user: "19",
-                date: "2021-12-02T23:00:00.000+00:00",
-              },
-              {
-                value: "4.5",
-                description: "Good film",
-                film: "1",
-                user: "11",
-                date: "2020-11-02T23:00:00.000+00:00",
-              },
+                  id: 2,
+                  title: "Spiderman No Way Home",
+                  genre: "Action",
+                  released_at: "2021-12-17T00:00:00.000Z",
+                  rating: "9"
+              },{
+                id: 3,
+                title: "It",
+                genre: "Terror",
+                released_at: "2017-09-08T00:00:00.000Z",
+                rating: "6.4"
+              },{
+                id: 1,
+                title: "Spiderman Homecoming",
+                genre: "Action",
+                released_at: "2017-07-28T00:00:00.000Z",
+                rating: "9",
+              }
             ]);
-            expect(dbFind).toBeCalledWith(
-              { sort: 'des' },
-              null,
-              { sort: { date: -1 } },
-              expect.any(Function)
-            );
+
           });
-      });
-  
-      it("should return ratings filtered by description", () => {
-        dbFind.mockImplementation((query, sm, sort, callback) => {
-          callback(null, [{
-            value: "4.5",
-            description: "Good film",
-            film: "1",
-            user: "11",
-            date: "2020-11-02T23:00:00.000+00:00",
-          },
-          {
-            value: "1.5",
-            description: "Bad film",
-            film: "15",
-            user: "19",
-            date: "2021-12-02T23:00:00.000+00:00",
-          }]);
-        });
-        return request(app)
-          .get("/api/v1/ratings")
-          .query({ description: "film" })
-          .then(
-            (response) => {
+
+          return request(app)
+            .get("/api/v1/films")
+            .query({ sort: 'des' })
+            .then((response) => {
               expect(response.statusCode).toBe(200);
               expect(response.body).toStrictEqual([
                 {
-                  value: "4.5",
-                  description: "Good film",
-                  film: "1",
-                  user: "11",
-                  date: "2020-11-02T23:00:00.000+00:00",
-                },
-                {
-                  value: "1.5",
-                  description: "Bad film",
-                  film: "15",
-                  user: "19",
-                  date: "2021-12-02T23:00:00.000+00:00",
+                    id: 2,
+                    title: "Spiderman No Way Home",
+                    genre: "Action",
+                    released_at: "2021-12-17T00:00:00.000Z",
+                    rating: "9"
+                },{
+                  id: 3,
+                  title: "It",
+                  genre: "Terror",
+                  released_at: "2017-09-08T00:00:00.000Z",
+                  rating: "6.4"
+                },{
+                  id: 1,
+                  title: "Spiderman Homecoming",
+                  genre: "Action",
+                  released_at: "2017-07-28T00:00:00.000Z",
+                  rating: "9",
                 },
               ]);
               expect(dbFind).toBeCalledWith(
-                { description: { $regex: /film/i } },
+                { sort: 'des' },
                 null,
-                { sort: { date: 1 } },
+                { sort: { released_at: -1 } },
                 expect.any(Function)
               );
-            }
-          );
-      });
-  
-      it("should return ratings filtered by range of dates", () => {
-        dbFind.mockImplementation((query, sm, sort, callback) => {
-          callback(null, [{
-            value: "1.5",
-            description: "Bad film",
-            film: "15",
-            user: "19",
-            date: "2021-12-02T23:00:00.000+00:00",
-          },
-          {
-            value: "3",
-            description: "Nice",
-            film: "15",
-            user: "11",
-            date: "2021-12-16T17:00:00.000+00:00",
-          }]);
+            });
         });
-        return request(app)
-          .get("/api/v1/ratings")
-          .query({ between: "2020-12-01:2021-12-20" })
-          .then(
-            (response) => {
+
+        it("should return all films filtered by genre", () => {
+
+          dbFind.mockImplementation((query, sm, sort, callback) => {
+
+            callback(null, [
+
+              {
+                  id: 2,
+                  title: "Spiderman No Way Home",
+                  genre: "Action",
+                  released_at: "2021-12-17T00:00:00.000Z",
+                  rating: "9"
+              },{
+                id: 1,
+                title: "Spiderman Homecoming",
+                genre: "Action",
+                released_at: "2017-07-28T00:00:00.000Z",
+                rating: "9",
+              }
+            ]);
+
+          });
+
+          return request(app)
+            .get("/api/v1/films")
+            .query({ genre: 'Action' })
+            .then((response) => {
               expect(response.statusCode).toBe(200);
               expect(response.body).toStrictEqual([
                 {
-                  value: "1.5",
-                  description: "Bad film",
-                  film: "15",
-                  user: "19",
-                  date: "2021-12-02T23:00:00.000+00:00",
+                    id: 2,
+                    title: "Spiderman No Way Home",
+                    genre: "Action",
+                    released_at: "2021-12-17T00:00:00.000Z",
+                    rating: "9"
+                },{
+                  id: 1,
+                  title: "Spiderman Homecoming",
+                  genre: "Action",
+                  released_at: "2017-07-28T00:00:00.000Z",
+                  rating: "9",
                 },
-                {
-                  value: "3",
-                  description: "Nice",
-                  film: "15",
-                  user: "11",
-                  date: "2021-12-16T17:00:00.000+00:00",
-                }
               ]);
               expect(dbFind).toBeCalledWith(
-                { between: { '$gte': date = moment('2020-12-01'), '$lt': moment('2021-12-20') } },
+                { sort: 'des' },
                 null,
-                { sort: { date: 1 } },
+                { sort: { released_at: -1 } },
                 expect.any(Function)
               );
-            }
-          );
-      }); 
-  
-      it("should return ratings filtered by range of punctuations", () => {
-        dbFind.mockImplementation((query, sm, sort, callback) => {
-          callback(null, [{
-            value: "4.5",
-            description: "Good film",
-            film: "1",
-            user: "11",
-            date: "2020-11-02T23:00:00.000+00:00",
-          },
-          {
-            value: "3",
-            description: "Nice",
-            film: "15",
-            user: "11",
-            date: "2021-12-16T17:00:00.000+00:00",
-          }]);
+            });
         });
-        return request(app)
-          .get("/api/v1/ratings")
-          .query({ lessThan: 5, greaterThan: 3 })
-          .then(
-            (response) => {
+
+        it("should return all films between two dates", () => {
+
+          dbFind.mockImplementation((query, sm, sort, callback) => {
+
+            callback(null, [
+              {
+                id: 1,
+                title: "Spiderman Homecoming",
+                genre: "Action",
+                released_at: "2017-07-28T00:00:00.000Z",
+                rating: "9",
+              },{
+                id: 3,
+                title: "It",
+                genre: "Terror",
+                released_at: "2017-09-08T00:00:00.000Z",
+                rating: "6.4"
+              }
+            ]);
+
+          });
+
+          return request(app)
+            .get("/api/v1/films")
+            .query({ startDate: '2017-01-01', endDate: '2021-01-01' })
+            .then((response) => {
               expect(response.statusCode).toBe(200);
               expect(response.body).toStrictEqual([
                 {
-                  value: "4.5",
-                  description: "Good film",
-                  film: "1",
-                  user: "11",
-                  date: "2020-11-02T23:00:00.000+00:00",
+                  id: 1,
+                  title: "Spiderman Homecoming",
+                  genre: "Action",
+                  released_at: "2017-07-28T00:00:00.000Z",
+                  rating: "9",
+                },{
+                  id: 3,
+                  title: "It",
+                  genre: "Terror",
+                  released_at: "2017-09-08T00:00:00.000Z",
+                  rating: "6.4"
                 },
-                {
-                  value: "3",
-                  description: "Nice",
-                  film: "15",
-                  user: "11",
-                  date: "2021-12-16T17:00:00.000+00:00",
-                }
               ]);
               expect(dbFind).toBeCalledWith(
-                { lessThan: '5', greaterThan: '3', value: { '$gt': '3' } },
+                { sort: 'des' },
                 null,
-                { sort: { date: 1 } },
+                { sort: { released_at: -1 } },
                 expect.any(Function)
               );
-            }
-          );
-      });
-  
-      it("should return ratings filtered by user", () => {
-        dbFind.mockImplementation((query, sm, sort, callback) => {
-          callback(null, [{
-            value: "4.5",
-            description: "Good film",
-            film: "1",
-            user: "11",
-            date: "2020-11-02T23:00:00.000+00:00",
-          },
-          {
-            value: "3",
-            description: "Nice",
-            film: "15",
-            user: "11",
-            date: "2021-12-16T17:00:00.000+00:00",
-          }]);
+            });
         });
-        return request(app)
-          .get("/api/v1/ratings")
-          .query({ user: 11 })
-          .then(
-            (response) => {
+
+        it("should return all films filtered by year", () => {
+
+          dbFind.mockImplementation((query, sm, sort, callback) => {
+
+            callback(null, [
+              {
+                id: 1,
+                title: "Spiderman Homecoming",
+                genre: "Action",
+                released_at: "2017-07-28T00:00:00.000Z",
+                rating: "9",
+              },{
+                id: 3,
+                title: "It",
+                genre: "Terror",
+                released_at: "2017-09-08T00:00:00.000Z",
+                rating: "6.4"
+              }
+            ]);
+
+          });
+
+          return request(app)
+            .get("/api/v1/films")
+            .query({ year: '2017'})
+            .then((response) => {
               expect(response.statusCode).toBe(200);
               expect(response.body).toStrictEqual([
                 {
-                  value: "4.5",
-                  description: "Good film",
-                  film: "1",
-                  user: "11",
-                  date: "2020-11-02T23:00:00.000+00:00",
+                  id: 1,
+                  title: "Spiderman Homecoming",
+                  genre: "Action",
+                  released_at: "2017-07-28T00:00:00.000Z",
+                  rating: "9",
+                },{
+                  id: 3,
+                  title: "It",
+                  genre: "Terror",
+                  released_at: "2017-09-08T00:00:00.000Z",
+                  rating: "6.4"
                 },
-                {
-                  value: "3",
-                  description: "Nice",
-                  film: "15",
-                  user: "11",
-                  date: "2021-12-16T17:00:00.000+00:00",
-                }
               ]);
               expect(dbFind).toBeCalledWith(
-                { user: "11" },
+                { sort: 'des' },
                 null,
-                { sort: { date: 1 } },
+                { sort: { released_at: -1 } },
                 expect.any(Function)
               );
-            }
-          );
-      });
-  
-      it("should return ratings filtered by film", () => {
-        dbFind.mockImplementation((query, sm, sort, callback) => {
-          callback(null, [{
-            value: "1.5",
-            description: "Bad film",
-            film: "15",
-            user: "19",
-            date: "2021-12-02T23:00:00.000+00:00",
-          },
-          {
-            value: "3",
-            description: "Nice",
-            film: "15",
-            user: "11",
-            date: "2021-12-16T17:00:00.000+00:00",
-          }]);
+            });
         });
-        return request(app)
-          .get("/api/v1/ratings")
-          .query({film: 15})
-          .then(
-            (response) => {
+
+        it("should return all films filtered by rating", () => {
+
+          dbFind.mockImplementation((query, sm, sort, callback) => {
+
+            callback(null, [
+              {
+                id: 1,
+                title: "Spiderman Homecoming",
+                genre: "Action",
+                released_at: "2017-07-28T00:00:00.000Z",
+                rating: "9",
+              },{
+                id: 2,
+                title: "Spiderman No Way Home",
+                genre: "Action",
+                released_at: "2021-12-17T00:00:00.000Z",
+                rating: "9"
+              }
+            ]);
+
+          });
+
+          return request(app)
+            .get("/api/v1/films")
+            .query({ rating: 6.5})
+            .then((response) => {
               expect(response.statusCode).toBe(200);
               expect(response.body).toStrictEqual([
                 {
-                  value: "1.5",
-                  description: "Bad film",
-                  film: "15",
-                  user: "19",
-                  date: "2021-12-02T23:00:00.000+00:00",
+                  id: 1,
+                  title: "Spiderman Homecoming",
+                  genre: "Action",
+                  released_at: "2017-07-28T00:00:00.000Z",
+                  rating: "9",
+                },{
+                  id: 2,
+                  title: "Spiderman No Way Home",
+                  genre: "Action",
+                  released_at: "2021-12-17T00:00:00.000Z",
+                  rating: "9"
                 },
-                {
-                  value: "3",
-                  description: "Nice",
-                  film: "15",
-                  user: "11",
-                  date: "2021-12-16T17:00:00.000+00:00",
-                }
               ]);
               expect(dbFind).toBeCalledWith(
-                { film: "15"},
+                { sort: 'des' },
                 null,
-                { sort: { date: 1 } },
+                { sort: { released_at: -1 } },
                 expect.any(Function)
               );
-            }
-          );
-      });
+            });
+        });
+
     });
+
+    describe("GET /films BY ID", () => {
+
+      beforeAll(() => {
+
+        const film = 
+          {
+            _id: 1,
+            title: "Spiderman Homecoming",
+            genre: "Action",
+            released_at: "2017-07-28T00:00:00.000Z",
+            rating: "9",
+          };
+
+        dbFindById = jest.spyOn(Film, "findById");
+        dbFindById.mockImplementation((r, callback) => {
+          callback(null, film);
+        });
+
+     });
+
+     it("should return a film by id", () => {
+      return request(app)
+        .get("/api/v1/films/1")
+        .then((response) => {
+          expect(response.statusCode).toBe(200);
+          expect(response.body).toStrictEqual({
+            _id: 1,
+            title: "Spiderman Homecoming",
+            genre: "Action",
+            released_at: "2017-07-28T00:00:00.000Z",
+            rating: "9",
+          });
+          expect(dbFindById).toBeCalledWith(
+            { _id: "1" },
+            expect.any(Function)
+          );
+        });
+    });
+
+    });
+
+});
+  
+    /* 
   
     describe("GET /ratings BY ID", () => {
       beforeAll(() => {
@@ -681,5 +706,3 @@ describe("Films API", () => {
     });
 
     */
-    
-  });
