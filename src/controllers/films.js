@@ -70,13 +70,13 @@ app.get("/", (req, res) => {
 
 //GET FILM BY ID
 app.get("/:film_id", (req, res) => {
-    console.log(Date() + " - GET /films BY ID");
+    console.log(Date() + " - GET /films/id");
     let id = req.params.film_id;
   
     Film.findById({ _id:id }, (err, film) => {
       if (err) {
         console.log(Date() + " - " + err);
-        res.sendStatus(500);
+        res.sendStatus(404);
       } else {
         res.send(film);
       }
@@ -104,53 +104,55 @@ app.post("/", (req, res) => {
 });
 
 //MODIFY AN EXISTING FILM FOUND BY ID
-app.put("/:id", (req, res) => {
+app.put("/:film_id", (req, res) => {
     console.log(Date() + " - PUT /films/id");
 
-    Film.countDocuments({id: req.params.id}, function (err, count){ 
-        if(count>0){
-            Film.findOneAndUpdate({id:req.params.id},
-            {title:req.body.title,
-            genre:req.body.genre,
-            released_at:req.body.released_at,
-            poster:req.body.poster,
-            director:req.body.director,
-            original_language:req.body.original_language,
-            overview:req.body.overview,
-            rating:req.body.rating
-            }, (err) => {
-                if (err) {
-                    console.log(Date() + " - " + err);
-                    res.sendStatus(500);
-                } else {
-                    res.sendStatus(200);
-                }
-            });
-        }else{
-            res.sendStatus(404);
-        }
-    });     
-});
+    let id = req.params.film_id;
+    let body = req.body;
 
-//DELETE EXISTING FILM FOUND BY ID
-app.delete("/:id", (req, res) => {
-    console.log(Date() + " - DELETE /films/id");
+    const filter = { _id: id };
+    const update = body;
 
-    Film.countDocuments({id: req.params.id}, function (err, count){ 
-        if(count>0){
-            Film.findOneAndDelete({id:req.params.id}, (err) => {
-                if (err) {
-                    console.log(Date() + " - " + err);
-                    res.sendStatus(500);
-                } else {
-                    res.sendStatus(200);
-                }
+    Film.findOneAndUpdate(filter, update, { runValidators: true }, (err, film) => {
+        if (err) {
+
+            console.log(Date() + " - " + err);
+
+            if (err.errors) {
+                res.status(400).send({ error: err.message })
+            } else {
+            res.sendStatus(500);
+            }
+        } else {
+
+            res.send(film);
+
+            /*
+            Film.findById({ _id:id }, (err, film_changed) => {
+                res.send(film_changed);
             });
-        }else{
-            res.sendStatus(404);
+            */
+
         }
+      });
+ });
+
+
+
+// DELETE EXISTING FILM FOUND BY ID
+app.delete("/:film_id", (req, res) => {
+    console.log(Date() + " - DELETE /films/:film_id");
+    const film_id = req.params.film_id;
+    Film.deleteOne({ _id: film_id }, (err, film) => {
+      if (err) {
+        console.log(Date() + " - " + err);
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(200);
+      }
     });
-});
+  });
+
 
 //DELETE ALL FILMS FROM THE COLLECTION
 app.delete("/", (req, res) => {
