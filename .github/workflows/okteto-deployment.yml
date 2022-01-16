@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    uses: MUISCDGTI/Peliculas/.github/workflows/tests.yml@master
+    uses: MUISCDGTI/Peliculas/.github/workflows/tests.yml
     
   deploy:
     needs: test
