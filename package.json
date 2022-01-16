@@ -23,6 +23,8 @@
     "mongoose-sequence": "^5.3.1",
     "passport": "^0.5.2",
     "passport-localapikey-update": "^0.6.0",
+    "swagger-jsdoc": "^6.1.0",
+    "swagger-ui-express": "^4.3.0",
     "uuid": "^8.3.2"
   },
   "bugs": {
