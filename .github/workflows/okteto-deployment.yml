@@ -9,7 +9,7 @@ on:
 
 jobs:
   test:
-    uses: MUISCDGTI/Peliculas/.github/workflows/tests.yml
+    uses: resinas/fis-contacts-backend/.github/workflows/tests.yml@v1
     
   deploy:
     needs: test
