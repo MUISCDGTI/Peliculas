@@ -1,0 +1,334 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "version": "1.0.0",
+      "title": "Films API Docs"
+    },
+    "host": "https://api-drorganvidez.cloud.okteto.net",
+    "basePath": "/api/v1",
+    "tags": [
+      {
+        "name": "film",
+        "description": "API"
+      }
+    ],
+    "schemes": [
+      "https",
+      "http"
+    ],
+    "paths": {
+      "/films/": {
+        "get": {
+          "tags": [
+            "film"
+          ],
+          "summary": "Get all films",
+          "description": "Get all films from database",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "apikey",
+              "in": "query",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "startDate",
+              "in": "query",
+              "description": "Filter films with later release date",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "endDate",
+              "in": "query",
+              "description": "Filter films with earlier release date",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "year",
+              "in": "query",
+              "description": "Filter films by year",
+              "required": false,
+              "type": "string"
+            },
+            {
+              "name": "genre",
+              "in": "query",
+              "description": "Filter films by genre",
+              "required": false,
+              "type": "string"
+            }
+          ],
+          "security": [
+            {
+              "apikey": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/definitions/Film"
+                }
+              }
+            },
+            "400": {
+              "description": "Invalid status value"
+            }
+          }
+        }
+      },
+      "/films/{filmId}": {
+        "get": {
+          "tags": [
+            "film"
+          ],
+          "summary": "Find film by ID",
+          "description": "Returns a single film",
+          "operationId": "getPetById",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "apikey",
+              "in": "query",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "filmId",
+              "in": "path",
+              "description": "ID of film to return",
+              "required": true,
+              "type": "integer",
+              "format": "int64"
+            }
+          ],
+          "security": [
+            {
+              "apikey": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "successful operation",
+              "schema": {
+                "$ref": "#/definitions/Film"
+              }
+            },
+            "404": {
+              "description": "Film not found"
+            }
+          }
+        },
+        "post": {
+          "tags": [
+            "film"
+          ],
+          "summary": "Add a new film",
+          "operationId": "addFilm",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "apikey",
+              "in": "query",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "filmId",
+              "in": "path",
+              "description": "Film id to delete",
+              "required": true,
+              "type": "integer",
+              "format": "int64"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Film object that needs to be added to the store",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Film"
+              }
+            }
+          ],
+          "security": [
+            {
+              "apikey": []
+            }
+          ],
+          "responses": {
+            "201": {
+              "description": "Film created"
+            },
+            "400": {
+              "description": "Bad request"
+            }
+          }
+        },
+        "put": {
+          "tags": [
+            "film"
+          ],
+          "summary": "Update an existing film",
+          "operationId": "updateFilm",
+          "consumes": [
+            "application/json"
+          ],
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "apikey",
+              "in": "query",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "filmId",
+              "in": "path",
+              "description": "ID of film to update",
+              "required": true,
+              "type": "integer",
+              "format": "int64"
+            },
+            {
+              "in": "body",
+              "name": "body",
+              "description": "Film object that needs to be added to the store",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/Film"
+              }
+            }
+          ],
+          "security": [
+            {
+              "apikey": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Ok",
+              "schema": {
+                "$ref": "#/definitions/Film"
+              }
+            },
+            "400": {
+              "description": "Bad request"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        },
+        "delete": {
+          "tags": [
+            "film"
+          ],
+          "summary": "Deletes a film",
+          "operationId": "deleteFilm",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "apikey",
+              "in": "query",
+              "required": true,
+              "type": "string"
+            },
+            {
+              "name": "filmId",
+              "in": "path",
+              "description": "Film id to delete",
+              "required": true,
+              "type": "integer",
+              "format": "int64"
+            }
+          ],
+          "security": [
+            {
+              "apikey": []
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "Ok"
+            },
+            "500": {
+              "description": "Internal server error"
+            }
+          }
+        }
+      }
+    },
+    "securityDefinitions": {
+      "apikey": {
+        "type": "apiKey",
+        "name": "apikey",
+        "in": "query"
+      }
+    },
+    "definitions": {
+      "Film": {
+        "type": "object",
+        "required": [
+          "released_at",
+          "title"
+        ],
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "Spiderman No Way Home"
+          },
+          "genre": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "Action, Adventure, Comedy, Fantasy, Horror, Romance, Thriller"
+            }
+          },
+          "released_at": {
+            "type": "string",
+            "example": "2021-12-17"
+          },
+          "poster": {
+            "type": "string",
+            "example": "https://pics.filmaffinity.com/Spider_Man_No_Way_Home-642739124-large.jpg"
+          },
+          "director": {
+            "type": "string",
+            "example": "Jon Watts"
+          },
+          "original_language": {
+            "type": "string",
+            "example": "English"
+          },
+          "overview": {
+            "type": "string",
+            "example": "Tras descubrirse la identidad secreta de Peter Parker como Spider-Man, la vida del joven se vuelve una locura. Peter decide pedirle ayuda al Doctor Extraño para recuperar su vida. Pero algo sale mal y provoca una fractura en el multiverso."
+          },
+          "rating": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 10
+          }
+        }
+      }
+    }
+  }
