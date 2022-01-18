@@ -102,7 +102,7 @@ app.post("/",passport.authenticate('localapikey', {session:false}), (req, res) =
               res.sendStatus(500);
             }
           } else {
-            res.sendStatus(201);
+            res.status(201).json(film);
           }
     });
 });
